@@ -34,6 +34,7 @@ export async function createPlisioInvoice(input: {
     source_currency: 'USD',
     source_amount: input.amountUsd,
     order_number: input.orderNumber,
+    order_name: `FF Diamond ${input.orderNumber}`,
     callback_url: input.callbackUrl,
     currency: 'USDT',
   })
