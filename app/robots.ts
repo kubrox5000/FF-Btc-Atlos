@@ -5,7 +5,7 @@ export const dynamic = 'force-static'
 export default function robots(): MetadataRoute.Robots {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://diamondboost.gg'
   return {
-    rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/api'] },
+    rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/api', '/payment', '/binance-pay/review', '/payment/confirmed'] },
     sitemap: `${base}/sitemap.xml`,
   }
 }

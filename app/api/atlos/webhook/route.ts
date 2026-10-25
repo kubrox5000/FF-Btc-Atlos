@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAtlosWebhook, markAtlosOrderPaid } from '@/lib/atlos'
+import { notifyTelegramPayment } from '@/lib/telegram'
 
 export const dynamic = 'force-dynamic'
 
@@ -49,6 +50,7 @@ export async function POST(req: NextRequest) {
       const updated = await markAtlosOrderPaid(orderNumber, txId)
       if (updated) {
         console.log(`[atlos] Order ${orderNumber} marked as PAID. Txid: ${txId || 'N/A'}`)
+        try { await notifyTelegramPayment(updated, 'Atlos') } catch (error) { console.error('[telegram] Atlos notification failed', error) }
         return NextResponse.json({ ok: true, status: 'paid' })
       }
     }

@@ -3,6 +3,7 @@ import { db } from '@/db'
 import { orders } from '@/db/schemas'
 import { eq } from 'drizzle-orm'
 import { HELEKET_KEY, verifyWebhookSign, syncHeleketOrder } from '@/lib/heleket'
+import { notifyTelegramPayment } from '@/lib/telegram'
 
 export const dynamic = 'force-dynamic'
 
@@ -27,6 +28,9 @@ export async function POST(req: NextRequest) {
 
   try {
     const updated = await syncHeleketOrder(order)
+    if (updated.status === 'paid' && order.status !== 'paid') {
+      try { await notifyTelegramPayment(updated, 'Heleket') } catch (error) { console.error('[telegram] Heleket notification failed', error) }
+    }
     return NextResponse.json({ ok: true, status: updated.status })
   } catch (e) {
     console.error('[heleket] webhook sync failed', e)

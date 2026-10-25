@@ -62,7 +62,7 @@ export async function markAtlosOrderPaid(orderNumber: string, txId?: string): Pr
   if (!order) return null
 
   if (order.status === 'paid' || order.status === 'completed') {
-    return order
+    return null
   }
 
   const [updated] = await db

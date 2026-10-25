@@ -70,6 +70,11 @@ export default async function HomePage() {
         })),
       },
       {
+        '@type': 'BreadcrumbList',
+        '@id': `${base}/#breadcrumb`,
+        itemListElement: [{ '@type': 'ListItem', position: 1, name: 'Home', item: base }],
+      },
+      {
         '@type': 'WebSite',
         '@id': `${base}/#website`,
         url: base,

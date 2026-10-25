@@ -56,11 +56,13 @@ export async function localizedPageMetadata(pageKey: PageTitleKey): Promise<Meta
   const title = fullTitle ? `${fullTitle} — FF Diamond` : 'FF Diamond'
   const description = t(locale.lang, (pageKey.replace('title_', 'desc_')) as TKey)
   const path = pagePath[pageKey]
-  const url = path ? `${siteUrl}${path}` : undefined
+  const url = path ? new URL(path, siteUrl).toString() : undefined
 
+  const isPrivate = pageKey === 'title_payment' || pageKey === 'title_payment_review'
   const meta: Metadata = {
     title,
     description,
+    robots: isPrivate ? { index: false, follow: false, googleBot: { index: false, follow: false } } : undefined,
     alternates: url ? { canonical: url } : undefined,
     openGraph: {
       title,

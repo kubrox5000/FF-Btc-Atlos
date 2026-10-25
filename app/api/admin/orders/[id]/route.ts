@@ -5,6 +5,7 @@ import { orders } from '@/db/schemas'
 import { eq } from 'drizzle-orm'
 import { getAdminSession } from '@/lib/admin-session'
 import { ORDER_STATUSES } from '@/lib/orders'
+import { notifyTelegramPayment } from '@/lib/telegram'
 
 const schema = z.object({
   status: z.enum(ORDER_STATUSES as [string, ...string[]]).optional(),
@@ -18,6 +19,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
   const parsed = schema.safeParse(body)
   if (!parsed.success) return NextResponse.json({ error: 'Invalid input' }, { status: 400 })
 
+  const current = (await db.select().from(orders).where(eq(orders.id, Number(id))).limit(1))[0]
+  if (!current) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+
   const update: Record<string, unknown> = { updatedAt: new Date() }
   if (parsed.data.status) update.status = parsed.data.status
   if (parsed.data.adminNotes !== undefined) update.adminNotes = parsed.data.adminNotes
@@ -26,6 +30,9 @@ export async function PATCH(req: NextRequest, { params }: { params: Promise<{ id
     await db.update(orders).set(update).where(eq(orders.id, Number(id))).returning()
   )[0]
   if (!updated) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+  if (parsed.data.status === 'completed' && current.status !== 'completed') {
+    try { await notifyTelegramPayment(updated, 'Admin') } catch (error) { console.error('[telegram] Admin notification failed', error) }
+  }
   return NextResponse.json({ order: updated })
 }
 

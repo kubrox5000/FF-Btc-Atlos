@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
-import { Loader2, Save, Rocket, Phone, Share2, LifeBuoy, Coins, UserRound, KeyRound, Target, CreditCard, Copy } from 'lucide-react'
+import { Loader2, Save, Rocket, Phone, Share2, LifeBuoy, Coins, UserRound, KeyRound, Target, CreditCard, Copy, Send } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton'
 import type { SiteSettings } from '@/lib/settings'
 
@@ -210,6 +210,15 @@ export function SettingsClient() {
         </div>
       </Section>
 
+      <Section icon={<Send className="h-4 w-4 text-sky-300" />} title="Telegram Support Notifications">
+        <p className="mb-4 text-xs text-muted-foreground">Add the Telegram bot credentials that should receive a notification whenever a customer payment is completed. Keep the bot token private.</p>
+        <div className="grid gap-3 sm:grid-cols-2">
+          <Text label="Bot Token" value={str(draft.telegramBotToken)} onChange={(v) => set('telegramBotToken', v)} placeholder="123456789:AA..." mono type="password" />
+          <Text label="Chat ID" value={str(draft.telegramChatId)} onChange={(v) => set('telegramChatId', v)} placeholder="-1001234567890" mono />
+        </div>
+        <p className="mt-3 text-[11px] text-muted-foreground">Use the group or channel Chat ID where your support team should receive completed-order alerts, then click Save Settings.</p>
+      </Section>
+
       <Section icon={<Share2 className="h-4 w-4 text-pink-400" />} title="Social Media Accounts">
         <div className="grid gap-3 sm:grid-cols-2">
           <Text label="Instagram" value={str(draft.instagram)} onChange={(v) => set('instagram', v)} placeholder="https://instagram.com/…" />
@@ -340,11 +349,12 @@ function Section({ icon, title, children }: { icon: React.ReactNode; title: stri
   )
 }
 
-function Text({ label, value, onChange, placeholder, mono }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; mono?: boolean }) {
+function Text({ label, value, onChange, placeholder, mono, type = 'text' }: { label: string; value: string; onChange: (v: string) => void; placeholder?: string; mono?: boolean; type?: 'text' | 'password' }) {
   return (
     <div>
       <label className="mb-1.5 block text-xs font-medium text-muted-foreground">{label}</label>
       <input
+        type={type}
         value={value}
         onChange={(e) => onChange(e.target.value)}
         placeholder={placeholder}

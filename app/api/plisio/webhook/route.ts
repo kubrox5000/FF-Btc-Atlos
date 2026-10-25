@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { eq } from 'drizzle-orm'
 import { db } from '@/db'
 import { orders } from '@/db/schemas'
+import { notifyTelegramPayment } from '@/lib/telegram'
 
 const paidStatuses = new Set(['completed', 'mismatch'])
 
@@ -13,6 +14,10 @@ export async function POST(req: NextRequest) {
   if (!orderNumber || !status) return NextResponse.json({ error: 'Invalid callback' }, { status: 400 })
 
   const nextStatus = paidStatuses.has(status) ? 'paid' : status === 'cancelled' || status === 'expired' ? 'cancelled' : 'pending_payment'
-  await db.update(orders).set({ status: nextStatus, txId: txnId, updatedAt: new Date() }).where(eq(orders.orderNumber, orderNumber))
+  const current = (await db.select().from(orders).where(eq(orders.orderNumber, orderNumber)).limit(1))[0]
+  const updated = (await db.update(orders).set({ status: nextStatus, txId: txnId, updatedAt: new Date() }).where(eq(orders.orderNumber, orderNumber)).returning())[0]
+  if (updated && nextStatus === 'paid' && current?.status !== 'paid') {
+    try { await notifyTelegramPayment(updated, 'Plisio') } catch (error) { console.error('[telegram] Plisio notification failed', error) }
+  }
   return NextResponse.json({ ok: true })
 }
