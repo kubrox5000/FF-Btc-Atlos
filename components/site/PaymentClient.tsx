@@ -371,7 +371,7 @@ function HeleketPanel({ order, expired, mins, secs }: { order: PublicOrder; expi
 
 function AtlosPanel({ order, expired, mins, secs }: { order: PublicOrder; expired: boolean; mins: number; secs: number }) {
   const router = useRouter()
-  const { t } = useLocale()
+  const { t, lang } = useLocale()
   const paid = ['paid', 'processing', 'completed'].includes(order.status)
   const review = order.status === 'payment_review'
   const cancelled = order.status === 'cancelled'
@@ -412,6 +412,7 @@ function AtlosPanel({ order, expired, mins, secs }: { order: PublicOrder; expire
       orderId: order.orderNumber,
       orderAmount: Number(order.amountUsd),
       orderCurrency: 'USD',
+      language: lang,
       userEmail: order.email || undefined,
       onSuccess: () => {
         toast.success(t('pay_heleket_paid'))
