@@ -407,12 +407,14 @@ function AtlosPanel({ order, expired, mins, secs }: { order: PublicOrder; expire
       toast.error(t('pay_atlos_loading'))
       return
     }
+    const selectedLanguage = document.documentElement.lang || lang
     atlos.Pay({
       merchantId: atlosMerchantId,
       orderId: order.orderNumber,
       orderAmount: Number(order.amountUsd),
       orderCurrency: 'USD',
-      language: lang,
+      language: selectedLanguage,
+      locale: selectedLanguage,
       userEmail: order.email || undefined,
       onSuccess: () => {
         toast.success(t('pay_heleket_paid'))
