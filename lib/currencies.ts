@@ -1,6 +1,6 @@
 // Client-safe country/locale/currency resolution.
 
-export type Lang = 'en' | 'ar' | 'fr' | 'es'
+export type Lang = 'en' | 'ar' | 'fr' | 'es' | 'de' | 'it' | 'pt' | 'tr' | 'ru' | 'zh' | 'ja' | 'ko' | 'hi' | 'id'
 export type Dir = 'ltr' | 'rtl'
 
 export interface CurrencyInfo {
