@@ -30,7 +30,7 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel }: Props) {
   const finalUsd = discountedPrice(pkg.priceUsd, pkg.discountPct)
   const hasDiscount = pkg.discountPct > 0
   const xMultiplier = X4_DIAMONDS.includes(pkg.diamonds) ? 4 : X3_DIAMONDS.includes(pkg.diamonds) ? 3 : X2_DIAMONDS.includes(pkg.diamonds) ? 2 : 0
-  const giftDiamonds = pkg.bonusDiamonds > 0 ? pkg.bonusDiamonds : Math.max(50, pkg.sortOrder * 50)
+  const giftDiamonds = pkg.bonusDiamonds > 0 ? pkg.bonusDiamonds : Math.max(50, Number(pkg.sortOrder || 1) * 50)
   const baseTotal = pkg.diamonds + giftDiamonds
   const total = xMultiplier > 0 ? baseTotal * xMultiplier : baseTotal
 
@@ -70,14 +70,12 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel }: Props) {
             <span className="text-2xl font-extrabold">{formatNumber(pkg.diamonds)}</span>
             <span className="text-sm font-medium text-muted-foreground">💎</span>
           </div>
-          {pkg.bonusDiamonds > 0 && (
-            <div className="mt-0.5 flex items-center gap-1" translate="no">
-              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[11px] font-bold text-emerald-400 ring-1 ring-emerald-500/30">
-                <Gift className="h-2.5 w-2.5 shrink-0" />
-                +{formatNumber(pkg.bonusDiamonds)} {t('pkg_free')}
-              </span>
-            </div>
-          )}
+          <div className="mt-0.5 flex items-center gap-1" translate="no">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[11px] font-bold text-emerald-400 ring-1 ring-emerald-500/30">
+              <Gift className="h-2.5 w-2.5 shrink-0" />
+              +{formatNumber(giftDiamonds)} {t('pkg_free')}
+            </span>
+          </div>
         </div>
       </div>
 
