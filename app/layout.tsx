@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
@@ -29,15 +29,17 @@ const geistMono = Geist_Mono({
   preload: false,     // Mono غير ضروري في اللود الأول
 });
 
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
+  themeColor: '#050507',
+}
+
 export const metadata: Metadata = {
   ...jsonMetadata,
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://diamondboost.gg'),
   applicationName: 'FF Diamond',
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    viewportFit: 'cover',
-  },
   openGraph: {
     title: jsonMetadata.title,
     description: jsonMetadata.description,
@@ -45,6 +47,8 @@ export const metadata: Metadata = {
     siteName: 'FF Diamond',
     images: ['/icon.png'],
   },
+  alternates: { canonical: '/' },
+  robots: { index: true, follow: true, googleBot: { index: true, follow: true, 'max-image-preview': 'large', 'max-snippet': -1, 'max-video-preview': -1 } },
   twitter: {
     card: 'summary_large_image',
     title: jsonMetadata.title,
