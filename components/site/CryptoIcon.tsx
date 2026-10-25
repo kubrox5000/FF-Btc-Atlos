@@ -9,6 +9,15 @@ export function CryptoIcon({
   className?: string
 }) {
   switch (id) {
+    case 'PLISIO':
+      return (
+        <img
+          src="https://plisio.net/favicon.ico"
+          alt="Plisio"
+          className={className}
+          referrerPolicy="no-referrer"
+        />
+      )
     case 'ATLOS':
       return (
         <svg viewBox="0 0 32 32" className={className} aria-label="Atlos">
