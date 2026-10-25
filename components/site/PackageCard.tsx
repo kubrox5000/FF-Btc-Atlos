@@ -25,12 +25,13 @@ interface Props {
   freeGift?: string
 }
 
-function PackageCardBase({ pkg, selected, onSelect, ctaLabel, freeGift }: Props) {
+function PackageCardBase({ pkg, selected, onSelect, ctaLabel }: Props) {
   const { t, formatPrice } = useLocale()
   const finalUsd = discountedPrice(pkg.priceUsd, pkg.discountPct)
   const hasDiscount = pkg.discountPct > 0
   const xMultiplier = X4_DIAMONDS.includes(pkg.diamonds) ? 4 : X3_DIAMONDS.includes(pkg.diamonds) ? 3 : X2_DIAMONDS.includes(pkg.diamonds) ? 2 : 0
-  const baseTotal = pkg.diamonds + pkg.bonusDiamonds
+  const giftDiamonds = pkg.bonusDiamonds > 0 ? pkg.bonusDiamonds : Math.max(50, pkg.sortOrder * 50)
+  const baseTotal = pkg.diamonds + giftDiamonds
   const total = xMultiplier > 0 ? baseTotal * xMultiplier : baseTotal
 
   return (
@@ -105,9 +106,7 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel, freeGift }: Props)
       <div className="mt-4 flex items-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-3 py-2 text-xs font-semibold text-gold">
         <Gift className="h-3.5 w-3.5 shrink-0" />
         <span className="line-clamp-2" translate="no">
-          {pkg.bonusDiamonds > 0
-            ? t('pkg_gift_free', { n: formatNumber(pkg.bonusDiamonds) })
-            : (freeGift?.trim() || t('pkg_gift'))}
+          {t('pkg_gift_free', { n: formatNumber(giftDiamonds) })}
         </span>
       </div>
 
