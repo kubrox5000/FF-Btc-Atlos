@@ -197,9 +197,12 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
               {lang === 'ar' ? 'لا توجد باقات متوفرة حالياً' : 'No packages available at the moment'}
             </div>
           ) : (
-            packages.map((p) => (
-              <PackageCard key={p.id} pkg={p} selected={selected?.id === p.id} onSelect={setSelected} ctaLabel={t('pkg_select')} freeGift={freeGift} />
-            ))
+              packages.map((p) => {
+                const giftDiamonds = p.bonusDiamonds > 0 ? p.bonusDiamonds : p.sortOrder * 50
+                return (
+                  <PackageCard key={p.id} pkg={{ ...p, bonusDiamonds: giftDiamonds }} selected={selected?.id === p.id} onSelect={setSelected} ctaLabel={t('pkg_select')} freeGift={freeGift} />
+                )
+              })
           )}
         </div>
 

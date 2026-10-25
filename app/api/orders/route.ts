@@ -126,6 +126,9 @@ export async function POST(req: NextRequest) {
     }
   }
 
+  // Gift diamonds start at 50 for package one and increase by 50 per package.
+  const giftDiamonds = pkg.bonusDiamonds > 0 ? pkg.bonusDiamonds : pkg.sortOrder * 50
+
   // ── Insert order ──────────────────────────────────────────────────────────
   const inserted = (
     await db
@@ -133,7 +136,7 @@ export async function POST(req: NextRequest) {
       .values({
         orderNumber,
         packageId:     pkg.id,
-        diamonds:      pkg.diamonds + pkg.bonusDiamonds,
+        diamonds:      pkg.diamonds + giftDiamonds,
         playerUid:     data.playerUid,
         nickname:      data.nickname || null,
         server:        data.server,
