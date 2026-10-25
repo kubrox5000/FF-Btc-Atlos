@@ -42,15 +42,19 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
   const [couponPct, setCouponPct] = useState(0)
   const [checkingCoupon, setCheckingCoupon] = useState(false)
   const cryptoMethods = useMemo(() => paymentMethods.filter((m) => m.cat === 'crypto'), [paymentMethods])
+  const plisioMethods = useMemo(() => cryptoMethods.filter((m) => m.key === 'PLISIO'), [cryptoMethods])
+  const atlosMethods = useMemo(() => cryptoMethods.filter((m) => m.key === 'ATLOS'), [cryptoMethods])
+  const otherCryptoMethods = useMemo(() => cryptoMethods.filter((m) => m.key !== 'PLISIO' && m.key !== 'ATLOS'), [cryptoMethods])
   const walletMethods = useMemo(() => paymentMethods.filter((m) => m.cat !== 'crypto'), [paymentMethods])
 
   // ── Payment-method accordion state ─────────────────────────────────────────
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
-    if (!method) return { crypto: false, wallet: false }
+    if (!method) return { crypto: false, plisio: false, atlos: false, wallet: false }
+    const key = paymentMethods.find((m) => m.key === method)?.key
     const cat = paymentMethods.find((m) => m.key === method)?.cat === 'crypto' ? 'crypto' : 'wallet'
-    return { crypto: cat === 'crypto', wallet: cat === 'wallet' }
+    return { crypto: cat === 'crypto' && key !== 'PLISIO' && key !== 'ATLOS', plisio: key === 'PLISIO', atlos: key === 'ATLOS', wallet: cat === 'wallet' }
   })
-  const toggleGroup = (g: 'crypto' | 'wallet') =>
+  const toggleGroup = (g: 'crypto' | 'plisio' | 'atlos' | 'wallet') =>
     setOpenGroups((p) => ({ ...p, [g]: !p[g] }))
 
   const [submitting, setSubmitting] = useState(false)
@@ -270,19 +274,55 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
           <p className="-mt-1 mb-4 text-sm text-muted-foreground lg:mb-5">{t('pay_group_hint')}</p>
 
           <div className="space-y-4">
-            {/* العملات الرقمية */}
-            {cryptoMethods.length > 0 && (
+            {/* Plisio and Atlos remain separate gateways for clearer checkout choices. */}
+            {plisioMethods.length > 0 && (
+              <PayGroup
+                open={openGroups.plisio}
+                onToggle={() => toggleGroup('plisio')}
+                icon={<StablecoinIconCluster />}
+                iconClass="bg-transparent"
+                title="Stablecoin"
+                sub="BTC, ETH and stablecoin payments"
+                radio={plisioMethods.some((m) => m.key === method)}
+              >
+                <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
+                  {plisioMethods.map((m) => (
+                    <MethodTile key={m.key} m={m} selected={method === m.key} onClick={() => setMethod(m.key)} />
+                  ))}
+                </div>
+              </PayGroup>
+            )}
+
+            {atlosMethods.length > 0 && (
+              <PayGroup
+                open={openGroups.atlos}
+                onToggle={() => toggleGroup('atlos')}
+                icon={<AtlosCurrencyCluster />}
+                iconClass="bg-transparent"
+                title="Atlos"
+                sub="USDT, BTC, ETH, SOL, LTC, BUSD, BNB"
+                radio={atlosMethods.some((m) => m.key === method)}
+              >
+                <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
+                  {atlosMethods.map((m) => (
+                    <MethodTile key={m.key} m={m} selected={method === m.key} onClick={() => setMethod(m.key)} />
+                  ))}
+                </div>
+              </PayGroup>
+            )}
+
+            {otherCryptoMethods.length > 0 && (
               <PayGroup
                 open={openGroups.crypto}
                 onToggle={() => toggleGroup('crypto')}
-                icon={<MethodIconCluster methods={cryptoMethods} />}
+                icon={<MethodIconCluster methods={otherCryptoMethods} />}
                 iconClass="bg-transparent"
                 title={t('pay_group_crypto')}
                 sub={t('pay_group_crypto_sub')}
-                radio={cryptoMethods.some((m) => m.key === method)}
+                radio={otherCryptoMethods.some((m) => m.key === method)}
               >
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {cryptoMethods.map((m) => (
+                  {otherCryptoMethods.map((m) => (
                     <MethodTile key={m.key} m={m} selected={method === m.key} onClick={() => setMethod(m.key)} />
                   ))}
                 </div>
@@ -380,7 +420,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
                       )}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-muted-foreground">طريقة الدفع</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t('payment_method')}</p>
                       {method ? (
                         <p className="truncate font-semibold">
                           {pm?.label ?? method}
@@ -444,7 +484,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
               >
                 <ArrowRight className="h-4 w-4" />
-                تغيير طريقة الدفع
+                {t('change_payment')}
               </button>
 
               <button
@@ -576,6 +616,30 @@ function PayGroup({
       </button>
       {open && <div className="px-4 pb-4 sm:px-5 sm:pb-5">{children}</div>}
     </div>
+  )
+}
+
+function AtlosCurrencyCluster() {
+  return (
+    <span className="flex items-center gap-1" aria-label="USDT, BTC, ETH, SOL, LTC, BUSD and BNB">
+      {(['USDT_TRC20', 'BTC', 'ETH', 'SOL', 'LTC', 'BUSD', 'BNB'] as const).map((id) => (
+        <span key={id} title={id.replace('_TRC20', '')} className="grid h-6 w-6 shrink-0 place-items-center overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-black/5">
+          <CryptoIcon id={id} className="h-5 w-5" />
+        </span>
+      ))}
+    </span>
+  )
+}
+
+function StablecoinIconCluster() {
+  return (
+    <span className="flex items-center gap-1.5" aria-label="BTC and ETH">
+      {(['BTC', 'ETH'] as const).map((id) => (
+        <span key={id} title={id} className="grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/5">
+          <CryptoIcon id={id} className="h-5 w-5" />
+        </span>
+      ))}
+    </span>
   )
 }
 

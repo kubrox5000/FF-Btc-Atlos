@@ -15,6 +15,7 @@ import type { PublicPackage, PublicPaymentMethod } from '@/lib/types'
 import { localizedPageMetadata } from '@/lib/seo'
 import { withHeleket } from '@/lib/heleket'
 import { withAtlos } from '@/lib/atlos'
+import { withPlisio } from '@/lib/plisio'
 import { isDatabaseConfigured } from '@/lib/db-ssl'
 
 export const dynamic = 'force-dynamic'
@@ -51,7 +52,7 @@ export default async function TopUpPage() {
         <OfficialBannerSection />
 
         <Suspense fallback={<div className="h-40 animate-pulse rounded-2xl bg-secondary/40" />}>
-          <TopUpForm packages={pkgRows} paymentMethods={await withAtlos(withHeleket(methods))} freeGift={settings.freeGift} />
+          <TopUpForm packages={pkgRows} paymentMethods={withPlisio(await withAtlos(withHeleket(methods)))} freeGift={settings.freeGift} />
         </Suspense>
       </main>
       <SiteFooter settings={settings} />

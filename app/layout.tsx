@@ -76,7 +76,11 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://analytics.tiktok.com" />
         <link rel="dns-prefetch" href="https://sc-static.net" />
         {/* Inject brand data before any JS runs — eliminates the /api/site-brand fetch */}
-        <script dangerouslySetInnerHTML={{ __html: brandScript }} />
+        <script
+          id="ff-brand-data"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: brandScript }}
+        />
         {process.env.NODE_ENV === 'production' && (
           <Script
             strategy="lazyOnload"

@@ -9,6 +9,15 @@ export function CryptoIcon({
   className?: string
 }) {
   switch (id) {
+    case 'PLISIO':
+      return (
+        <img
+          src="https://plisio.net/favicon.ico"
+          alt="Plisio"
+          className={className}
+          referrerPolicy="no-referrer"
+        />
+      )
     case 'ATLOS':
       return (
         <svg viewBox="0 0 32 32" className={className} aria-label="Atlos">
@@ -140,6 +149,20 @@ export function CryptoIcon({
             fill="#191C1F"
             d="M20.9133 6.9566C20.9133 3.1208 17.7898 0 13.9503 0H2.424v3.8605h10.9782c1.7376 0 3.177 1.3651 3.2087 3.043.016.84-.2994 1.633-.8878 2.2324-.5886.5998-1.375.9303-2.2144.9303H9.2322a.2756.2756 0 0 0-.2755.2752v3.431c0 .0585.018.1142.052.1612L16.2646 24h5.3114l-7.2727-10.094c3.6625-.1838 6.61-3.2612 6.61-6.9494zM6.8943 5.9229H2.424V24h4.4704z"
           />
+        </svg>
+      )
+    case 'LTC':
+      return (
+        <svg viewBox="0 0 32 32" className={className} aria-label="LTC">
+          <circle fill="#345D9D" cx="16" cy="16" r="16" />
+          <path fill="#FFF" d="M12.2 22.8h11.1l-.8 3H7.1l1.7-6.3-2.2.8.7-2.6 2.2-.8 2.6-9.7h4.9l-2.4 8.9 2.2-.8-.7 2.6-2.2.8-1.7 6.1z" />
+        </svg>
+      )
+    case 'BUSD':
+      return (
+        <svg viewBox="0 0 32 32" className={className} aria-label="BUSD">
+          <circle fill="#F0B90B" cx="16" cy="16" r="16" />
+          <path fill="#FFF" d="m16 5.8 2.4 2.4-7.8 7.8-2.4-2.4L16 5.8zm4.8 4.8 2.4 2.4-7.8 7.8-2.4-2.4 7.8-7.8zm-9.6 4.8 2.4 2.4-4.8 4.8-2.4-2.4 4.8-4.8zm9.6 0 2.4 2.4-7.8 7.8-2.4-2.4 7.8-7.8z" />
         </svg>
       )
     case 'SOL':

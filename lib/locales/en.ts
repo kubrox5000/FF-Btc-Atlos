@@ -135,6 +135,8 @@ export const en = {
   req_pkg: 'Select a diamond package first',
   req_pay: 'Please choose a payment method first',
   choose_pay: 'Choose a payment method',
+  payment_method: 'Payment method',
+  change_payment: 'Change payment method',
   req_uid: 'Enter a valid numeric Player ID',
   err_uid_short: 'Player ID must be at least 4 digits',
   err_email: 'Enter a valid email address',

@@ -135,6 +135,8 @@ export const fr = {
   req_pkg: 'Sélectionnez d\'abord un pack de diamants',
   req_pay: 'Veuillez d\'abord choisir un moyen de paiement',
   choose_pay: 'Choisissez un moyen de paiement',
+  payment_method: 'Mode de paiement',
+  change_payment: 'Changer le mode de paiement',
   req_uid: 'Entrez un ID joueur numérique valide',
   err_uid_short: 'L\'ID joueur doit comporter au moins 4 chiffres',
   err_email: 'Entrez une adresse email valide',

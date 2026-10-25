@@ -118,8 +118,11 @@ export function PaymentClient({ order }: { order: PublicOrder }) {
     return <HeleketPanel order={order} expired={expired} mins={mins} secs={secs} />
   }
 
+  if (order.paymentMethod === 'PLISIO') {
+    return <PlisioPanel order={order} expired={expired} mins={mins} secs={secs} />
+  }
   if (order.paymentMethod === 'ATLOS') {
-    return <AtlosPanel order={order} expired={expired} mins={mins} secs={secs} />
+    return <HostedPaymentPanel order={order} expired={expired} mins={mins} secs={secs} />
   }
 
   return (
@@ -369,9 +372,25 @@ function HeleketPanel({ order, expired, mins, secs }: { order: PublicOrder; expi
   )
 }
 
-function AtlosPanel({ order, expired, mins, secs }: { order: PublicOrder; expired: boolean; mins: number; secs: number }) {
-  const router = useRouter()
+function PlisioPanel({ order, expired, mins, secs }: { order: PublicOrder; expired: boolean; mins: number; secs: number }) {
   const { t } = useLocale()
+  const paid = ['paid', 'processing', 'completed'].includes(order.status)
+  const disabled = expired || order.status === 'cancelled' || !order.walletAddress
+  return (
+    <div className="mx-auto max-w-xl rounded-3xl border border-border bg-card p-6 shadow-xl sm:p-8">
+      <div className="flex items-center justify-between">
+        <div><p className="text-xs text-muted-foreground">{t('pay_order')}</p><p className="font-mono font-bold" translate="no">{order.orderNumber}</p></div>
+        {order.status === 'pending_payment' && <span className="text-sm font-semibold">{expired ? t('pay_expired') : `${mins}:${String(secs).padStart(2, '0')}`}</span>}
+      </div>
+      <div className="mt-6 rounded-2xl bg-primary/5 p-5 text-center"><p className="text-sm text-muted-foreground">{t('pay_exact')}</p><p className="mt-2 text-4xl font-semibold" dir="ltr" translate="no">${Number(order.amountUsd).toFixed(2)} USD</p></div>
+      {paid ? <p className="mt-5 rounded-xl bg-emerald-500/10 p-4 text-center">{t('pay_heleket_paid')}</p> : <a href={disabled ? undefined : order.walletAddress ?? undefined} target="_blank" rel="noopener noreferrer" aria-disabled={disabled} className="mt-6 flex min-h-12 items-center justify-center rounded-xl bg-primary px-5 py-3.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90 aria-disabled:pointer-events-none aria-disabled:opacity-50">{t('pay_atlos_btn')}</a>}
+    </div>
+  )
+}
+
+function HostedPaymentPanel({ order, expired, mins, secs }: { order: PublicOrder; expired: boolean; mins: number; secs: number }) {
+  const router = useRouter()
+  const { t, lang } = useLocale()
   const paid = ['paid', 'processing', 'completed'].includes(order.status)
   const review = order.status === 'payment_review'
   const cancelled = order.status === 'cancelled'
@@ -407,11 +426,15 @@ function AtlosPanel({ order, expired, mins, secs }: { order: PublicOrder; expire
       toast.error(t('pay_atlos_loading'))
       return
     }
+    const selectedLanguage = document.documentElement.lang || lang
     atlos.Pay({
       merchantId: atlosMerchantId,
       orderId: order.orderNumber,
       orderAmount: Number(order.amountUsd),
       orderCurrency: 'USD',
+      lang: selectedLanguage,
+      language: selectedLanguage,
+      locale: selectedLanguage,
       userEmail: order.email || undefined,
       onSuccess: () => {
         toast.success(t('pay_heleket_paid'))
