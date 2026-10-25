@@ -7,6 +7,7 @@ import { generateOrderNumber, discountedPrice } from '@/lib/orders'
 import { getSettings } from '@/lib/settings'
 import { HELEKET_KEY, isHeleketConfigured, createHeleketInvoice } from '@/lib/heleket'
 import { ATLOS_KEY } from '@/lib/atlos'
+import { PLISIO_KEY, createPlisioInvoice, isPlisioConfigured } from '@/lib/plisio'
 
 const createSchema = z.object({
   packageId: z.number().int().positive(),
@@ -109,6 +110,22 @@ export async function POST(req: NextRequest) {
     walletAddress = 'ATLOS_CHECKOUT'
   }
 
+  // ── Plisio: create a hosted invoice before saving the order ────────────────
+  let plisioUrl: string | null = null
+  let plisioTxnId: string | null = null
+  if (data.paymentMethod === PLISIO_KEY) {
+    if (!isPlisioConfigured()) return NextResponse.json({ error: 'Plisio payments are not configured' }, { status: 503 })
+    try {
+      const invoice = await createPlisioInvoice({ orderNumber, amountUsd: baseUsd.toFixed(2), callbackUrl: `${req.nextUrl.origin}/api/plisio/webhook`, email: data.email })
+      plisioUrl = invoice.url
+      plisioTxnId = invoice.txnId
+      walletAddress = invoice.url
+    } catch (e) {
+      console.error('[plisio] invoice creation failed', e)
+      return NextResponse.json({ error: 'Could not create the Plisio invoice. Please try again.' }, { status: 502 })
+    }
+  }
+
   // ── Insert order ──────────────────────────────────────────────────────────
   const inserted = (
     await db
@@ -127,12 +144,12 @@ export async function POST(req: NextRequest) {
         amountUsdt:    baseUsdt.toFixed(2),
         paymentMethod: data.paymentMethod,
         walletAddress,
-        txId:          heleketUuid,
+        txId:          heleketUuid || plisioTxnId,
         couponCode:    appliedCoupon,
         status:        'pending_payment',
       })
       .returning()
   )[0]
 
-  return NextResponse.json({ order: inserted, paymentUrl: heleketUuid ? walletAddress : null })
+  return NextResponse.json({ order: inserted, paymentUrl: heleketUuid || plisioUrl ? walletAddress : null })
 }
