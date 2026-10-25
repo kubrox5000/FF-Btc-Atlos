@@ -1,0 +1,8 @@
+[build]
+  command = "pnpm run build"
+  publish = ".next"
+
+# Generate the server functions and routing required by the Next.js App Router.
+# Publishing .next alone serves build artifacts and returns 404 for dynamic pages.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"

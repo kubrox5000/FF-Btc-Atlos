@@ -1,0 +1,41 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1785532178665,
+      "tag": "0000_many_nextwave",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1785533765234,
+      "tag": "0001_old_madelyne_pryor",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1787177193473,
+      "tag": "0002_outstanding_deathbird",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1787181545714,
+      "tag": "0003_dapper_lady_vermin",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1787235600000,
+      "tag": "0004_binance_pay_wallet",
+      "breakpoints": true
+    }
+  ]
+}

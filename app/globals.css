@@ -1,0 +1,269 @@
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #0a0a0b;
+  --foreground: #e8e4de;
+  --card: #111114;
+  --card-foreground: #e8e4de;
+  --popover: #111114;
+  --popover-foreground: #e8e4de;
+  --primary: #f5a623;
+  --primary-foreground: #0a0a0b;
+  --secondary: #1a1a1f;
+  --secondary-foreground: #e8e4de;
+  --muted: #1a1a1f;
+  --muted-foreground: #a8a298;
+  --accent: #ff6b2b;
+  --accent-foreground: #0a0a0b;
+  --gold: #ffd700;
+  --gold-foreground: #0a0a0b;
+  --destructive: #fb2c36;
+  --destructive-foreground: #ffffff;
+  --border: #1f1f24;
+  --input: #1a1a1f;
+  --ring: #f5a623;
+  --chart-1: #f5a623;
+  --chart-2: #ff6b2b;
+  --chart-3: #ffd700;
+  --chart-4: #f59e0b;
+  --chart-5: #fb2c36;
+  --radius: 1rem;
+  --sidebar: #111114;
+  --sidebar-foreground: #e8e4de;
+  --sidebar-primary: #f5a623;
+  --sidebar-primary-foreground: #0a0a0b;
+  --sidebar-accent: #1a1a1f;
+  --sidebar-accent-foreground: #e8e4de;
+  --sidebar-border: #1f1f24;
+  --sidebar-ring: #f5a623;
+}
+
+.light {
+  --background: #faf8f5;
+  --foreground: #1a1a1f;
+  --card: #ffffff;
+  --card-foreground: #1a1a1f;
+  --popover: #ffffff;
+  --popover-foreground: #1a1a1f;
+  --primary: #e0900f;
+  --primary-foreground: #ffffff;
+  --secondary: #f3f0ea;
+  --secondary-foreground: #24242b;
+  --muted: #f3f0ea;
+  --muted-foreground: #6b675f;
+  --accent: #ff6b2b;
+  --accent-foreground: #ffffff;
+  --gold: #d4af37;
+  --gold-foreground: #1a1a1f;
+  --destructive: #e11d2f;
+  --destructive-foreground: #ffffff;
+  --border: #e4e0d8;
+  --input: #e4e0d8;
+  --ring: #e0900f;
+  --chart-1: #e0900f;
+  --chart-2: #ff6b2b;
+  --chart-3: #d4af37;
+  --chart-4: #f59e0b;
+  --chart-5: #e11d2f;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #1a1a1f;
+  --sidebar-primary: #e0900f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f3f0ea;
+  --sidebar-accent-foreground: #24242b;
+  --sidebar-border: #e4e0d8;
+  --sidebar-ring: #e0900f;
+}
+
+@theme inline {
+  --font-sans: 'Geist', 'Geist Fallback';
+  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-gold: var(--gold);
+  --color-gold-foreground: var(--gold-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    background-image:
+      radial-gradient(60rem 40rem at 15% -10%, #f5a62318, transparent 60%),
+      radial-gradient(50rem 40rem at 95% 0%, #ff6b2b12, transparent 55%);
+  }
+}
+
+@layer components {
+  .glass {
+    background: color-mix(in oklch, var(--card) 92%, transparent);
+    border: 1px solid color-mix(in oklch, var(--border) 100%, transparent);
+  }
+  .text-gradient {
+    background: linear-gradient(90deg, #f5a623, gold, #ff6b2b, #f5a623) 0 0 / 200%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+  .glow-primary {
+    box-shadow: 0 0 0 1px #f5a62366, 0 8px 40px -8px #f5a62380;
+  }
+  .glow-gold {
+    box-shadow: 0 0 0 1px #f5a62366, 0 14px 60px -12px #f5a623cc;
+  }
+  .btn-shimmer {
+    background: linear-gradient(135deg, #f5a623, #ff6b2b);
+    position: relative;
+    overflow: hidden;
+  }
+  .btn-shimmer::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(100deg, transparent, oklch(1 0 0 / 0.28), transparent);
+    transform: translateX(-120%);
+    transition: transform 0.7s;
+  }
+  .btn-shimmer:hover::after {
+    transform: translateX(120%);
+  }
+  .input-base {
+    @apply w-full rounded-lg border border-input bg-background/60 px-3 py-2.5 text-sm outline-none transition-colors focus:border-primary focus:ring-2 focus:ring-primary/30;
+  }
+  .input-error {
+    @apply border-rose-400 focus:border-rose-400 focus:ring-rose-400/30;
+  }
+}
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-24px) rotate(8deg); }
+}
+.animate-float-slow { animation: float-slow 8s ease-in-out infinite; }
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 0.4; }
+  50% { opacity: 0.7; }
+}
+.animate-pulse-glow { animation: pulse-glow 6s ease-in-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200%; }
+  100% { background-position: 200%; }
+}
+
+@keyframes diamond-float {
+  0%, 100% { transform: translateY(0) rotate(0); }
+  50% { transform: translateY(-8px) rotate(4deg); }
+}
+.diamond-float { animation: diamond-float 5s ease-in-out infinite; will-change: transform; }
+
+/* ── Performance hints ───────────────────────────────────────────────── */
+/* CSS containment يمنع إعادة حساب layout بالكامل */
+.glass { contain: layout style; }
+
+/* تحسين الرسم: نقل الطبقات إلى GPU فقط على العناصر المتحركة */
+.btn-shimmer,
+.diamond-float,
+.animate-float-slow {
+  transform: translateZ(0);
+}
+
+/* تسريع التمرير على الموبايل */
+html {
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* تقليل reflow عند ظهور المحتوى */
+img, video {
+  content-visibility: auto;
+}
+
+/* تحسين font rendering */
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeSpeed;
+}
+
+/* Hero CSS fade-in animations — replaces framer-motion on first paint */
+@keyframes hero-fade-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero-fade   { animation: hero-fade-up 0.3s ease both; }
+.hero-fade-2 { animation-delay: 0.05s; }
+.hero-fade-3 { animation-delay: 0.10s; }
+.hero-fade-4 { animation-delay: 0.14s; }
+.hero-fade-5 { animation-delay: 0.18s; }
+.hero-fade-6 { animation-delay: 0.22s; }
+
+/* Scroll reveal — content stays FULLY VISIBLE in the initial HTML (never
+   opacity:0), and only slides up subtly once it enters the viewport. This
+   prevents sections (e.g. "How it works") from being invisible until JS runs. */
+.reveal {
+  opacity: 1;
+  transform: translateY(8px);
+  will-change: transform;
+}
+.reveal-in {
+  transform: translateY(0);
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transform: none; }
+}
+
+/* Mobile touch & safe-area */
+.touch-manipulation { touch-action: manipulation; }
+.pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); }
+
+/* Prevent 300ms tap delay on older iOS */
+a, button { touch-action: manipulation; }
+
+
+nextjs-portal {
+  display: none !important;
+}
