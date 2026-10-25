@@ -380,7 +380,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
                       )}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-xs font-medium text-muted-foreground">طريقة الدفع</p>
+                      <p className="text-xs font-medium text-muted-foreground">{t('payment_method')}</p>
                       {method ? (
                         <p className="truncate font-semibold">
                           {pm?.label ?? method}
@@ -444,7 +444,7 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
                 className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl border border-border bg-card/60 px-4 py-2.5 text-sm font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
               >
                 <ArrowRight className="h-4 w-4" />
-                تغيير طريقة الدفع
+                {t('change_payment')}
               </button>
 
               <button
