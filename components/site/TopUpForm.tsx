@@ -42,15 +42,19 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
   const [couponPct, setCouponPct] = useState(0)
   const [checkingCoupon, setCheckingCoupon] = useState(false)
   const cryptoMethods = useMemo(() => paymentMethods.filter((m) => m.cat === 'crypto'), [paymentMethods])
+  const plisioMethods = useMemo(() => cryptoMethods.filter((m) => m.key === 'PLISIO'), [cryptoMethods])
+  const atlosMethods = useMemo(() => cryptoMethods.filter((m) => m.key === 'ATLOS'), [cryptoMethods])
+  const otherCryptoMethods = useMemo(() => cryptoMethods.filter((m) => m.key !== 'PLISIO' && m.key !== 'ATLOS'), [cryptoMethods])
   const walletMethods = useMemo(() => paymentMethods.filter((m) => m.cat !== 'crypto'), [paymentMethods])
 
   // ── Payment-method accordion state ─────────────────────────────────────────
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>(() => {
-    if (!method) return { crypto: false, wallet: false }
+    if (!method) return { crypto: false, plisio: false, atlos: false, wallet: false }
+    const key = paymentMethods.find((m) => m.key === method)?.key
     const cat = paymentMethods.find((m) => m.key === method)?.cat === 'crypto' ? 'crypto' : 'wallet'
-    return { crypto: cat === 'crypto', wallet: cat === 'wallet' }
+    return { crypto: cat === 'crypto' && key !== 'PLISIO' && key !== 'ATLOS', plisio: key === 'PLISIO', atlos: key === 'ATLOS', wallet: cat === 'wallet' }
   })
-  const toggleGroup = (g: 'crypto' | 'wallet') =>
+  const toggleGroup = (g: 'crypto' | 'plisio' | 'atlos' | 'wallet') =>
     setOpenGroups((p) => ({ ...p, [g]: !p[g] }))
 
   const [submitting, setSubmitting] = useState(false)
@@ -270,19 +274,55 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
           <p className="-mt-1 mb-4 text-sm text-muted-foreground lg:mb-5">{t('pay_group_hint')}</p>
 
           <div className="space-y-4">
-            {/* العملات الرقمية */}
-            {cryptoMethods.length > 0 && (
+            {/* Plisio and Atlos remain separate gateways for clearer checkout choices. */}
+            {plisioMethods.length > 0 && (
+              <PayGroup
+                open={openGroups.plisio}
+                onToggle={() => toggleGroup('plisio')}
+                icon={<MethodIconCluster methods={plisioMethods} />}
+                iconClass="bg-transparent"
+                title="Plisio"
+                sub="Crypto payment gateway"
+                radio={plisioMethods.some((m) => m.key === method)}
+              >
+                <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
+                  {plisioMethods.map((m) => (
+                    <MethodTile key={m.key} m={m} selected={method === m.key} onClick={() => setMethod(m.key)} />
+                  ))}
+                </div>
+              </PayGroup>
+            )}
+
+            {atlosMethods.length > 0 && (
+              <PayGroup
+                open={openGroups.atlos}
+                onToggle={() => toggleGroup('atlos')}
+                icon={<MethodIconCluster methods={atlosMethods} />}
+                iconClass="bg-transparent"
+                title="Atlos"
+                sub="USDT, BTC, ETH, SOL, LTC"
+                radio={atlosMethods.some((m) => m.key === method)}
+              >
+                <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
+                  {atlosMethods.map((m) => (
+                    <MethodTile key={m.key} m={m} selected={method === m.key} onClick={() => setMethod(m.key)} />
+                  ))}
+                </div>
+              </PayGroup>
+            )}
+
+            {otherCryptoMethods.length > 0 && (
               <PayGroup
                 open={openGroups.crypto}
                 onToggle={() => toggleGroup('crypto')}
-                icon={<MethodIconCluster methods={cryptoMethods} />}
+                icon={<MethodIconCluster methods={otherCryptoMethods} />}
                 iconClass="bg-transparent"
                 title={t('pay_group_crypto')}
                 sub={t('pay_group_crypto_sub')}
-                radio={cryptoMethods.some((m) => m.key === method)}
+                radio={otherCryptoMethods.some((m) => m.key === method)}
               >
                 <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  {cryptoMethods.map((m) => (
+                  {otherCryptoMethods.map((m) => (
                     <MethodTile key={m.key} m={m} selected={method === m.key} onClick={() => setMethod(m.key)} />
                   ))}
                 </div>
