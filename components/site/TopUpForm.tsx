@@ -279,10 +279,10 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
               <PayGroup
                 open={openGroups.plisio}
                 onToggle={() => toggleGroup('plisio')}
-                icon={<MethodIconCluster methods={plisioMethods} />}
+                icon={<StablecoinIconCluster />}
                 iconClass="bg-transparent"
-                title="Plisio"
-                sub="Crypto payment gateway"
+                title="Stablecoin"
+                sub="BTC, ETH and stablecoin payments"
                 radio={plisioMethods.some((m) => m.key === method)}
               >
                 <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
@@ -616,6 +616,18 @@ function PayGroup({
       </button>
       {open && <div className="px-4 pb-4 sm:px-5 sm:pb-5">{children}</div>}
     </div>
+  )
+}
+
+function StablecoinIconCluster() {
+  return (
+    <span className="flex items-center gap-1.5" aria-label="BTC and ETH">
+      {(['BTC', 'ETH'] as const).map((id) => (
+        <span key={id} title={id} className="grid h-7 w-7 shrink-0 place-items-center overflow-hidden rounded-lg bg-white shadow-sm ring-1 ring-black/5">
+          <CryptoIcon id={id} className="h-5 w-5" />
+        </span>
+      ))}
+    </span>
   )
 }
 
