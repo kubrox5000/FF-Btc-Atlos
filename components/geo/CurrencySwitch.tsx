@@ -18,7 +18,7 @@ const CURRENCY_FLAGS: Record<string, string> = {
   DZD: '🇩🇿', TND: '🇹🇳', IQD: '🇮🇶', KWD: '🇰🇼', QAR: '🇶🇦', BHD: '🇧🇭', OMR: '🇴🇲',
   JOD: '🇯🇴', LYD: '🇱🇾', CAD: '🇨🇦', AUD: '🇦🇺', NZD: '🇳🇿', CHF: '🇨🇭', INR: '🇮🇳',
   PKR: '🇵🇰', BDT: '🇧🇩', IDR: '🇮🇩', PHP: '🇵🇭', BRL: '🇧🇷', MXN: '🇲🇽', COP: '🇨🇴',
-  ARS: '🇦🇷', CLP: '🇨🇱', PEN: '🇵🇪', TRY: '🇹🇷', NGN: '🇳🇬', ZAR: '🇿🇦', KES: '🇰🇪',
+  ARS: '🇦🇷', CLP: '🇨🇱', PEN: '🇵🇪', PYG: '🇵🇾', TRY: '🇹🇷', NGN: '🇳🇬', ZAR: '🇿🇦', KES: '🇰🇪',
   GHS: '🇬🇭', THB: '🇹🇭', MYR: '🇲🇾', SGD: '🇸🇬', JPY: '🇯🇵', KRW: '🇰🇷', VND: '🇻🇳',
   SEK: '🇸🇪', NOK: '🇳🇴', DKK: '🇩🇰', PLN: '🇵🇱', CZK: '🇨🇿', HUF: '🇭🇺', RON: '🇷🇴', RUB: '🇷🇺',
 }
