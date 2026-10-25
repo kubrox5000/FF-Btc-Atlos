@@ -36,7 +36,6 @@ export async function createPlisioInvoice(input: {
     order_number: input.orderNumber,
     order_name: `FF Diamond ${input.orderNumber}`,
     callback_url: input.callbackUrl,
-    currency: 'USDT',
   })
   if (input.email) params.set('email', input.email)
 
