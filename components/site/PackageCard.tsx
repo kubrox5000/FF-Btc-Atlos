@@ -8,10 +8,6 @@ import { formatNumber } from '@/lib/currencies'
 import type { PublicPackage } from '@/lib/types'
 import { useLocale } from '@/components/geo/GeoLocaleProvider'
 
-// Packages that must NOT show the free-gift banner (by diamond amount).
-// Currently none — all regular packages show the gift banner.
-const NO_GIFT_DIAMONDS: number[] = []
-
 // Premium packages that give DOUBLE the ordered diamonds (X2 promotion).
 const X2_DIAMONDS = [21000, 24500, 28000, 32000, 36000, 40000]
 
@@ -106,6 +102,15 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel, freeGift }: Props)
         </li>
       </ul>
 
+      <div className="mt-4 flex items-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-3 py-2 text-xs font-semibold text-gold">
+        <Gift className="h-3.5 w-3.5 shrink-0" />
+        <span className="line-clamp-2" translate="no">
+          {pkg.bonusDiamonds > 0
+            ? t('pkg_gift_free', { n: formatNumber(pkg.bonusDiamonds) })
+            : (freeGift?.trim() || t('pkg_gift'))}
+        </span>
+      </div>
+
       {xMultiplier > 0 ? (
         <div className="mt-4 overflow-hidden rounded-lg border border-gold/50 bg-gradient-to-r from-gold/25 via-gold/10 to-emerald-500/25 px-3 py-2">
           <div className="flex items-center gap-2.5">
@@ -121,15 +126,6 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel, freeGift }: Props)
               </span>
             </div>
           </div>
-        </div>
-      ) : !NO_GIFT_DIAMONDS.includes(pkg.diamonds) ? (
-        <div className="mt-4 flex items-center gap-2 rounded-lg border border-gold/40 bg-gold/10 px-3 py-2 text-xs font-semibold text-gold">
-          <Gift className="h-3.5 w-3.5 shrink-0" />
-          <span className="line-clamp-2" translate="no">
-            {pkg.bonusDiamonds > 0
-              ? t('pkg_gift_free', { n: formatNumber(pkg.bonusDiamonds) })
-              : (freeGift?.trim() || t('pkg_gift'))}
-          </span>
         </div>
       ) : null}
 
