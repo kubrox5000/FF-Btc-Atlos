@@ -6,6 +6,20 @@ export function isPlisioConfigured() {
   return Boolean(process.env.PLISIO_API_KEY)
 }
 
+export function withPlisio<T extends { key: string }>(methods: T[]): T[] {
+  if (!isPlisioConfigured() || methods.some((method) => method.key === PLISIO_KEY)) return methods
+  return [...methods, {
+    key: PLISIO_KEY,
+    label: 'Plisio',
+    network: 'Crypto payment gateway',
+    cat: 'crypto',
+    icon: 'plisio',
+    walletAddress: null,
+    active: true,
+    sortOrder: 0,
+  } as unknown as T]
+}
+
 export async function createPlisioInvoice(input: {
   orderNumber: string
   amountUsd: string
