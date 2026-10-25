@@ -12,6 +12,9 @@ export function SettingsClient() {
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
   const [draft, setDraft] = useState<Draft>({})
+  const [plisioKey, setPlisioKey] = useState('')
+  const [plisioStatus, setPlisioStatus] = useState<{ configured: boolean; masked: string }>({ configured: false, masked: '' })
+  const [plisioSaving, setPlisioSaving] = useState(false)
 
   // Account (username / password)
   const [username, setUsername] = useState('')
@@ -21,6 +24,11 @@ export function SettingsClient() {
   const [accSaving, setAccSaving] = useState(false)
 
   useEffect(() => {
+    fetch('/api/admin/plisio')
+      .then((r) => r.json())
+      .then((d) => setPlisioStatus({ configured: Boolean(d.configured), masked: d.masked ?? '' }))
+      .catch(() => {})
+
     fetch('/api/admin/account')
       .then((r) => r.json())
       .then((d) => { if (d.username) setUsername(d.username) })
@@ -57,6 +65,20 @@ export function SettingsClient() {
   }, [])
 
   const set = (key: keyof SiteSettings, value: string | boolean) => setDraft((d) => ({ ...d, [key]: value }))
+
+  async function savePlisio() {
+    if (!plisioKey.trim()) return toast.error('Enter the Plisio API key')
+    setPlisioSaving(true)
+    try {
+      const res = await fetch('/api/admin/plisio', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey: plisioKey }) })
+      const data = await res.json()
+      if (!res.ok) throw new Error(data.error || 'Could not save Plisio API key')
+      setPlisioStatus({ configured: true, masked: data.masked })
+      setPlisioKey('')
+      toast.success('Plisio API key saved')
+    } catch (e) { toast.error(e instanceof Error ? e.message : 'Could not save Plisio API key') }
+    finally { setPlisioSaving(false) }
+  }
 
   async function saveAccount() {
     if (newPass && newPass !== confirmPass) return toast.error('New passwords do not match')
@@ -218,6 +240,14 @@ export function SettingsClient() {
           <Text label="RedotPay" value={str(draft.paymentRedotpay)} onChange={(v) => set('paymentRedotpay', v)} mono />
           <Text label="Bybit" value={str(draft.paymentBybit)} onChange={(v) => set('paymentBybit', v)} mono />
           <Text label="Revolut" value={str(draft.paymentRevolut)} onChange={(v) => set('paymentRevolut', v)} mono />
+        </div>
+      </Section>
+
+      <Section icon={<CreditCard className="h-4 w-4 text-cyan-300" />} title="Plisio Crypto Gateway">
+        <p className="mb-4 text-xs text-muted-foreground">Add or replace the Plisio API key. The key is stored on the server and is never displayed in full.</p>
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
+          <div className="flex-1"><Text label={plisioStatus.configured ? `Current key: ${plisioStatus.masked}` : 'Plisio API key'} value={plisioKey} onChange={setPlisioKey} placeholder="Paste a new Plisio API key" mono /></div>
+          <button onClick={savePlisio} disabled={plisioSaving || !plisioKey.trim()} className="flex h-10 items-center justify-center gap-2 rounded-xl bg-primary px-4 text-sm font-semibold text-primary-foreground disabled:opacity-50">{plisioSaving ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} {plisioSaving ? 'Saving…' : 'Save API key'}</button>
         </div>
       </Section>
 
