@@ -10,7 +10,6 @@ declare global {
 }
 
 function getBrand() {
-  if (typeof window !== 'undefined' && window.__FF_BRAND__) return window.__FF_BRAND__
   return { siteName: 'FF Diamond', logo: '' }
 }
 

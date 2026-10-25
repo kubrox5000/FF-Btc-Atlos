@@ -38,6 +38,7 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel }: Props) {
     <button
       type="button"
       onClick={() => onSelect?.(pkg)}
+      suppressHydrationWarning
       className={cn(
         'group relative flex w-full flex-col overflow-hidden rounded-2xl border p-4 sm:p-5 text-left transition-all duration-150',
         'hover:-translate-y-1 active:scale-[0.98]',

@@ -1,5 +1,4 @@
 import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { AgentationGuard } from '@/components/AgentationGuard';
@@ -10,7 +9,6 @@ import { GeoLocaleProvider } from '@/components/geo/GeoLocaleProvider';
 import { PageProgress } from '@/components/site/PageProgress';
 import { resolveServerLocale } from '@/lib/locale-server';
 import { dirOf } from '@/lib/currencies';
-import { getSettings } from '@/lib/settings';
 import { Toaster } from '@/components/ui/sonner';
 import './globals.css';
 import jsonMetadata from '../metadata.json';
@@ -62,11 +60,7 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const [initialLocale, settings] = await Promise.all([
-    resolveServerLocale(),
-    getSettings(),
-  ]);
-  const brandScript = `window.__FF_BRAND__=${JSON.stringify({ siteName: settings.siteName ?? '', logo: settings.logo ?? '' })};`
+  const initialLocale = await resolveServerLocale();
   return (
     <html lang={initialLocale.lang} dir={dirOf(initialLocale.lang)} className="dark" suppressHydrationWarning>
       <head>
@@ -80,14 +74,9 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://analytics.tiktok.com" />
         <link rel="dns-prefetch" href="https://sc-static.net" />
         {/* Inject brand data before any JS runs — eliminates the /api/site-brand fetch */}
-        <Script
-          id="ff-brand-data"
-          strategy="beforeInteractive"
-          dangerouslySetInnerHTML={{ __html: brandScript }}
-        />
-        {process.env.NODE_ENV === 'production' && (
-          <Script
-            strategy="lazyOnload"
+        {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL && (
+          <script
+            defer
             src={process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL}
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
           />
