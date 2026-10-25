@@ -107,7 +107,7 @@ export function GeoLocaleProvider({
     let override: Lang | undefined
     try {
       const stored = globalThis.localStorage?.getItem(OVERRIDE_KEY)
-      const supported = ['en', 'ar', 'fr', 'es', 'de', 'it', 'pt', 'tr', 'ru', 'zh', 'ja', 'ko', 'hi', 'id']
+      const supported = ['en', 'ar', 'fr', 'es', 'de', 'it', 'pt', 'pt-BR', 'tr', 'ru', 'zh', 'ja', 'ko', 'hi', 'id']
       override = supported.includes(stored ?? '') ? stored as Lang : undefined
     } catch {
       override = undefined

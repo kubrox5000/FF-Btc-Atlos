@@ -14,6 +14,7 @@ const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
   { code: 'it', label: 'Italiano', flag: '🇮🇹' },
   { code: 'pt', label: 'Português', flag: '🇵🇹' },
+  { code: 'pt-BR', label: 'Português (Brasil)', flag: '🇧🇷' },
   { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
   { code: 'ru', label: 'Русский', flag: '🇷🇺' },
   { code: 'zh', label: '中文', flag: '🇨🇳' },
