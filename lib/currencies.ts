@@ -1,6 +1,6 @@
 // Client-safe country/locale/currency resolution.
 
-export type Lang = 'en' | 'ar' | 'fr' | 'es'
+export type Lang = 'en' | 'ar' | 'fr' | 'es' | 'de' | 'it' | 'pt' | 'pt-BR' | 'tr' | 'ru' | 'zh' | 'ja' | 'ko' | 'hi' | 'id'
 export type Dir = 'ltr' | 'rtl'
 
 export interface CurrencyInfo {
@@ -50,8 +50,9 @@ export const CURRENCIES: Record<string, CurrencyInfo> = {
   BRL: { code: 'BRL', name: 'Brazilian Real', symbol: 'R$', rate: 5.1 },
   MXN: { code: 'MXN', name: 'Mexican Peso', symbol: 'Mex$', rate: 18.2 },
   COP: { code: 'COP', name: 'Colombian Peso', symbol: 'Col$', rate: 4100 },
-  ARS: { code: 'ARS', name: 'Argentine Peso', symbol: 'ARS$', rate: 980 },
-  CLP: { code: 'CLP', name: 'Chilean Peso', symbol: 'CLP$', rate: 930 },
+ ARS: { code: 'ARS', name: 'Argentine Peso', symbol: 'ARS$', rate: 980 },
+ PYG: { code: 'PYG', name: 'Paraguayan Guaraní', symbol: '₲', rate: 7800 },
+ CLP: { code: 'CLP', name: 'Chilean Peso', symbol: 'CLP$', rate: 930 },
   PEN: { code: 'PEN', name: 'Peruvian Sol', symbol: 'S/', rate: 3.75 },
   TRY: { code: 'TRY', name: 'Turkish Lira', symbol: '₺', rate: 34.5 },
   NGN: { code: 'NGN', name: 'Nigerian Naira', symbol: '₦', rate: 1500 },

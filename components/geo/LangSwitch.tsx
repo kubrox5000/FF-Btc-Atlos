@@ -8,9 +8,20 @@ import type { Lang } from '@/lib/currencies'
 
 const LANGUAGES: { code: Lang; label: string; flag: string }[] = [
   { code: 'ar', label: 'العربية', flag: '🇸🇦' },
-  { code: 'en', label: 'English',  flag: '🇺🇸' },
+  { code: 'en', label: 'English', flag: '🇺🇸' },
   { code: 'fr', label: 'Français', flag: '🇫🇷' },
-  { code: 'es', label: 'Español',  flag: '🇪🇸' },
+  { code: 'es', label: 'Español', flag: '🇪🇸' },
+  { code: 'de', label: 'Deutsch', flag: '🇩🇪' },
+  { code: 'it', label: 'Italiano', flag: '🇮🇹' },
+  { code: 'pt', label: 'Português', flag: '🇵🇹' },
+  { code: 'pt-BR', label: 'Português (Brasil)', flag: '🇧🇷' },
+  { code: 'tr', label: 'Türkçe', flag: '🇹🇷' },
+  { code: 'ru', label: 'Русский', flag: '🇷🇺' },
+  { code: 'zh', label: '中文', flag: '🇨🇳' },
+  { code: 'ja', label: '日本語', flag: '🇯🇵' },
+  { code: 'ko', label: '한국어', flag: '🇰🇷' },
+  { code: 'hi', label: 'हिन्दी', flag: '🇮🇳' },
+  { code: 'id', label: 'Bahasa Indonesia', flag: '🇮🇩' },
 ]
 
 export function LangSwitch({ className }: { className?: string }) {

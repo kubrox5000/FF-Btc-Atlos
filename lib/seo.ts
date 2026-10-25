@@ -34,11 +34,13 @@ const pagePath: Record<PageTitleKey, string | undefined> = {
   title_delivery: '/delivery',
 }
 
-const ogLocale: Record<Lang, string> = {
+const ogLocale: Partial<Record<Lang, string>> = {
   en: 'en_US',
   ar: 'ar_SA',
   fr: 'fr_FR',
   es: 'es_ES',
+  pt: 'pt_PT',
+  'pt-BR': 'pt_BR',
 }
 
 /**
@@ -65,7 +67,7 @@ export async function localizedPageMetadata(pageKey: PageTitleKey): Promise<Meta
       description,
       siteName: 'FF Diamond',
       type: 'website',
-      locale: ogLocale[locale.lang],
+      locale: ogLocale[locale.lang] ?? 'en_US',
       ...(url ? { url } : {}),
     },
     twitter: {

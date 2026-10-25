@@ -16,7 +16,7 @@ const ICONS: Record<PolicyKey, React.ReactNode> = {
   delivery: <Truck className="h-6 w-6" />,
 }
 
-const CONTENT: Record<PolicyKey, Record<Lang, PolicyContent>> = {
+const CONTENT: Record<PolicyKey, Partial<Record<Lang, PolicyContent>>> = {
   privacy: {
     ar: {
       title: 'سياسة الخصوصية',
@@ -245,7 +245,7 @@ const CONTENT: Record<PolicyKey, Record<Lang, PolicyContent>> = {
 
 export function PolicyPage({ policy }: { policy: PolicyKey }) {
   const { lang } = useLocale()
-  const c = CONTENT[policy][lang]
+  const c = (CONTENT[policy][lang] ?? CONTENT[policy].en ?? CONTENT[policy].ar)!
   return (
     <div className="mx-auto max-w-3xl">
       <div className="mb-8 flex items-center gap-4">
