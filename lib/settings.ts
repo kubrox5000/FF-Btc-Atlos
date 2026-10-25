@@ -48,6 +48,7 @@ export interface SiteSettings {
   telegramChatId: string
   atlosMerchantId: string
   atlosApiSecret: string
+  plisioApiKey: string
 }
 
 const DEFAULTS: SiteSettings = {
@@ -94,6 +95,7 @@ const DEFAULTS: SiteSettings = {
   telegramChatId: '',
   atlosMerchantId: '',
   atlosApiSecret: '',
+  plisioApiKey: '',
 }
 
 function getRawSql() {

@@ -1,3 +1,5 @@
+import { getSettings } from '@/lib/settings'
+
 const PLISIO_API_URL = 'https://api.plisio.net/api/v1/invoices/new'
 
 export const PLISIO_KEY = 'PLISIO'
@@ -26,7 +28,7 @@ export async function createPlisioInvoice(input: {
   callbackUrl: string
   email?: string | null
 }) {
-  const apiKey = process.env.PLISIO_API_KEY
+  const apiKey = (await getSettings()).plisioApiKey || process.env.PLISIO_API_KEY
   if (!apiKey) throw new Error('PLISIO_API_KEY is not configured')
 
   const params = new URLSearchParams({

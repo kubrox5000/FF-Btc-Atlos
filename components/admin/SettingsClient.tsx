@@ -71,7 +71,7 @@ export function SettingsClient() {
     setPlisioSaving(true)
     try {
       const res = await fetch('/api/admin/plisio', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ apiKey: plisioKey }) })
-      const data = await res.json()
+      const data = await res.json().catch(() => ({}))
       if (!res.ok) throw new Error(data.error || 'Could not save Plisio API key')
       setPlisioStatus({ configured: true, masked: data.masked })
       setPlisioKey('')
