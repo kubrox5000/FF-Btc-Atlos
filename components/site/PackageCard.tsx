@@ -60,7 +60,7 @@ function PackageCardBase({ pkg, selected, onSelect, ctaLabel, freeGift }: Props)
         </span>
       )}
 
-      <div className="mb-4 flex items-center gap-3">
+      <div className={cn('mb-4 flex items-center gap-3', (pkg.popular || pkg.flashSale) && 'pt-7')}>
         <span className="grid h-12 w-12 place-items-center rounded-xl bg-gradient-to-br from-sky-500/30 to-violet-500/30 ring-1 ring-inset ring-white/10">
           <Gem className="h-6 w-6 text-sky-300" />
         </span>
