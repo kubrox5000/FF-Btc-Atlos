@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { Coins, ChevronDown, Check } from 'lucide-react'
 import { cn } from '@/utils/cn'
 import { useLocale } from './GeoLocaleProvider'
+import { CURRENCIES as CURRENCY_DATA } from '@/lib/currencies'
 
 interface CurrencyOption {
   code: string
@@ -12,32 +13,22 @@ interface CurrencyOption {
   label: string
 }
 
-const CURRENCIES: CurrencyOption[] = [
-  { code: 'USD', symbol: '$',    flag: '🇺🇸', label: 'US Dollar' },
-  { code: 'EUR', symbol: '€',    flag: '🇪🇺', label: 'Euro' },
-  { code: 'GBP', symbol: '£',    flag: '🇬🇧', label: 'British Pound' },
-  { code: 'SAR', symbol: 'ر.س', flag: '🇸🇦', label: 'Saudi Riyal' },
-  { code: 'AED', symbol: 'د.إ', flag: '🇦🇪', label: 'Emirates Dirham' },
-  { code: 'EGP', symbol: 'ج.م', flag: '🇪🇬', label: 'Egyptian Pound' },
-  { code: 'MAD', symbol: 'د.م', flag: '🇲🇦', label: 'Moroccan Dirham' },
-  { code: 'DZD', symbol: 'د.ج', flag: '🇩🇿', label: 'Algerian Dinar' },
-  { code: 'TND', symbol: 'د.ت', flag: '🇹🇳', label: 'Tunisian Dinar' },
-  { code: 'IQD', symbol: 'د.ع', flag: '🇮🇶', label: 'Iraqi Dinar' },
-  { code: 'KWD', symbol: 'د.ك', flag: '🇰🇼', label: 'Kuwaiti Dinar' },
-  { code: 'QAR', symbol: 'ر.ق', flag: '🇶🇦', label: 'Qatari Riyal' },
-  { code: 'BHD', symbol: 'د.ب', flag: '🇧🇭', label: 'Bahrain Dinar' },
-  { code: 'OMR', symbol: 'ر.ع', flag: '🇴🇲', label: 'Omani Rial' },
-  { code: 'JOD', symbol: 'د.أ', flag: '🇯🇴', label: 'Jordanian Dinar' },
-  { code: 'LYD', symbol: 'د.ل', flag: '🇱🇾', label: 'Libyan Dinar' },
-  { code: 'CAD', symbol: 'C$',   flag: '🇨🇦', label: 'Canadian Dollar' },
-  { code: 'AUD', symbol: 'A$',   flag: '🇦🇺', label: 'Australian Dollar' },
-  { code: 'BRL', symbol: 'R$',   flag: '🇧🇷', label: 'Brazilian Real' },
-  { code: 'MXN', symbol: 'Mex$', flag: '🇲🇽', label: 'Mexican Peso' },
-  { code: 'TRY', symbol: '₺',    flag: '🇹🇷', label: 'Turkish Lira' },
-  { code: 'INR', symbol: '₹',    flag: '🇮🇳', label: 'Indian Rupee' },
-  { code: 'PKR', symbol: '₨',    flag: '🇵🇰', label: 'Pakistani Rupee' },
-  { code: 'IDR', symbol: 'Rp',   flag: '🇮🇩', label: 'Indonesian Rupiah' },
-]
+const CURRENCY_FLAGS: Record<string, string> = {
+  USD: '🇺🇸', EUR: '🇪🇺', GBP: '🇬🇧', SAR: '🇸🇦', AED: '🇦🇪', EGP: '🇪🇬', MAD: '🇲🇦',
+  DZD: '🇩🇿', TND: '🇹🇳', IQD: '🇮🇶', KWD: '🇰🇼', QAR: '🇶🇦', BHD: '🇧🇭', OMR: '🇴🇲',
+  JOD: '🇯🇴', LYD: '🇱🇾', CAD: '🇨🇦', AUD: '🇦🇺', NZD: '🇳🇿', CHF: '🇨🇭', INR: '🇮🇳',
+  PKR: '🇵🇰', BDT: '🇧🇩', IDR: '🇮🇩', PHP: '🇵🇭', BRL: '🇧🇷', MXN: '🇲🇽', COP: '🇨🇴',
+  ARS: '🇦🇷', CLP: '🇨🇱', PEN: '🇵🇪', TRY: '🇹🇷', NGN: '🇳🇬', ZAR: '🇿🇦', KES: '🇰🇪',
+  GHS: '🇬🇭', THB: '🇹🇭', MYR: '🇲🇾', SGD: '🇸🇬', JPY: '🇯🇵', KRW: '🇰🇷', VND: '🇻🇳',
+  SEK: '🇸🇪', NOK: '🇳🇴', DKK: '🇩🇰', PLN: '🇵🇱', CZK: '🇨🇿', HUF: '🇭🇺', RON: '🇷🇴', RUB: '🇷🇺',
+}
+
+const CURRENCIES: CurrencyOption[] = Object.values(CURRENCY_DATA).map((currency) => ({
+  code: currency.code,
+  symbol: currency.symbol,
+  flag: CURRENCY_FLAGS[currency.code] ?? '💱',
+  label: currency.name,
+}))
 
 export function CurrencySwitch({ className }: { className?: string }) {
   const { currency, setCurrency } = useLocale()
