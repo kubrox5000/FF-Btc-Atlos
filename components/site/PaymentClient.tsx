@@ -413,6 +413,7 @@ function AtlosPanel({ order, expired, mins, secs }: { order: PublicOrder; expire
       orderId: order.orderNumber,
       orderAmount: Number(order.amountUsd),
       orderCurrency: 'USD',
+      lang: selectedLanguage,
       language: selectedLanguage,
       locale: selectedLanguage,
       userEmail: order.email || undefined,
