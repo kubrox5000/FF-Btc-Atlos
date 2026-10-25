@@ -297,10 +297,10 @@ export function TopUpForm({ packages, paymentMethods, freeGift }: {
               <PayGroup
                 open={openGroups.atlos}
                 onToggle={() => toggleGroup('atlos')}
-                icon={<MethodIconCluster methods={atlosMethods} />}
+                icon={<AtlosCurrencyCluster />}
                 iconClass="bg-transparent"
                 title="Atlos"
-                sub="USDT, BTC, ETH, SOL, LTC"
+                sub="USDT, BTC, ETH, SOL, LTC, BUSD, BNB"
                 radio={atlosMethods.some((m) => m.key === method)}
               >
                 <div className="grid grid-cols-1 gap-3 sm:max-w-sm">
@@ -616,6 +616,18 @@ function PayGroup({
       </button>
       {open && <div className="px-4 pb-4 sm:px-5 sm:pb-5">{children}</div>}
     </div>
+  )
+}
+
+function AtlosCurrencyCluster() {
+  return (
+    <span className="flex items-center gap-1" aria-label="USDT, BTC, ETH, SOL, LTC, BUSD and BNB">
+      {(['USDT_TRC20', 'BTC', 'ETH', 'SOL', 'LTC', 'BUSD', 'BNB'] as const).map((id) => (
+        <span key={id} title={id.replace('_TRC20', '')} className="grid h-6 w-6 shrink-0 place-items-center overflow-hidden rounded-full bg-white shadow-sm ring-1 ring-black/5">
+          <CryptoIcon id={id} className="h-5 w-5" />
+        </span>
+      ))}
+    </span>
   )
 }
 
