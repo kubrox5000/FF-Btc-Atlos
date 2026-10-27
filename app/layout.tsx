@@ -1,4 +1,5 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Geist, Geist_Mono } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { AgentationGuard } from '@/components/AgentationGuard';
@@ -75,12 +76,16 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://sc-static.net" />
         {/* Inject brand data before any JS runs — eliminates the /api/site-brand fetch */}
         {process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL && (
-          <script
-            defer
+          <Script
             src={process.env.NEXT_PUBLIC_UMAMI_SCRIPT_URL}
             data-website-id={process.env.NEXT_PUBLIC_UMAMI_WEBSITE_ID}
+            strategy="afterInteractive"
           />
         )}
+        <Script
+          src="https://shown.io/metrics/Aq8dlRyN8K"
+          strategy="afterInteractive"
+        />
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
